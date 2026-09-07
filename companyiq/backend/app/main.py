@@ -117,3 +117,32 @@ def health():
         "demo_mode": settings.demo_mode,
         "llm_provider": settings.llm_provider,
     }
+
+
+# ── Single Localhost URL: Serve Frontend SPA from frontend/dist ──────────────
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+frontend_dist = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
+
+if frontend_dist.exists() and (frontend_dist / "index.html").exists():
+    assets_dir = frontend_dist / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="frontend-assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        # Do not catch unresolved /api calls with HTML
+        if full_path.startswith("api"):
+            return JSONResponse(
+                status_code=status.HTTP_404_NOT_FOUND,
+                content={"detail": "API endpoint not found"}
+            )
+        # Check if direct static file exists in dist (e.g., favicon.svg, icons.svg)
+        static_file = frontend_dist / full_path
+        if full_path and static_file.is_file():
+            return FileResponse(str(static_file))
+        # Fallback to index.html for React Router SPA routes
+        return FileResponse(str(frontend_dist / "index.html"))
+
