@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-slate-950 text-slate-100 font-sans antialiased;
+    background: radial-gradient(ellipse at top left, #1a1f4e 0%, #080d1a 60%);
+    min-height: 100vh;
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-slate-900; }
+  ::-webkit-scrollbar-thumb { @apply bg-slate-700 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-slate-500; }
+}
+
+@layer components {
+  /* Cards */
+  .card {
+    @apply bg-slate-900/80 border border-slate-800/60 rounded-2xl backdrop-blur-sm;
+  }
+  .card-hover {
+    @apply card transition-all duration-200 hover:border-brand-700/50 hover:shadow-lg hover:shadow-brand-950/50;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-brand-600 hover:bg-brand-500 text-white shadow-lg shadow-brand-900/40 active:scale-95;
+  }
+  .btn-secondary {
+    @apply btn bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700;
+  }
+  .btn-ghost {
+    @apply btn text-slate-400 hover:text-slate-100 hover:bg-slate-800/60;
+  }
+  .btn-danger {
+    @apply btn bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-700/30;
+  }
+  .btn-success {
+    @apply btn bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-700/30;
+  }
+
+  /* Inputs */
+  .input {
+    @apply w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-100
+           placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/50
+           focus:border-brand-600 transition-all duration-150;
+  }
+  .input-sm {
+    @apply input py-2 text-sm;
+  }
+
+  /* Badges */
+  .badge { @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold; }
+  .badge-high { @apply badge bg-emerald-500/15 text-emerald-400 border border-emerald-500/20; }
+  .badge-medium { @apply badge bg-amber-500/15 text-amber-400 border border-amber-500/20; }
+  .badge-low { @apply badge bg-orange-500/15 text-orange-400 border border-orange-500/20; }
+  .badge-very-low { @apply badge bg-red-500/15 text-red-400 border border-red-500/20; }
+  .badge-demo { @apply badge bg-purple-500/15 text-purple-400 border border-purple-500/20; }
+  .badge-ai { @apply badge bg-blue-500/15 text-blue-400 border border-blue-500/20; }
+  .badge-human { @apply badge bg-teal-500/15 text-teal-400 border border-teal-500/20; }
+
+  /* Score bar */
+  .score-bar {
+    @apply h-2 rounded-full bg-slate-800 overflow-hidden;
+  }
+  .score-fill {
+    @apply h-full rounded-full transition-all duration-700 ease-out;
+  }
+
+  /* Sidebar nav */
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+           text-slate-400 hover:text-slate-100 hover:bg-slate-800/60
+           transition-all duration-150 cursor-pointer;
+  }
+  .nav-item-active {
+    @apply nav-item text-brand-400 bg-brand-950/60 border border-brand-800/30;
+  }
+
+  /* Section headers */
+  .section-title {
+    @apply text-xl font-bold text-slate-100 flex items-center gap-2;
+  }
+  .section-subtitle {
+    @apply text-sm text-slate-400 mt-0.5;
+  }
+
+  /* Confidence indicator */
+  .confidence-ring {
+    @apply relative inline-flex items-center justify-center;
+  }
+
+  /* Evidence panel */
+  .evidence-item {
+    @apply flex items-start gap-3 p-3 rounded-xl bg-slate-800/40 border border-slate-700/40
+           hover:border-slate-600/60 transition-colors;
+  }
+
+  /* Skeleton loading */
+  .skeleton {
+    @apply animate-pulse bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800
+           rounded-lg bg-[length:200%_100%] animate-shimmer;
+  }
+
+  /* Glow effects */
+  .glow-brand { box-shadow: 0 0 40px -10px rgba(59, 94, 248, 0.3); }
+  .glow-emerald { box-shadow: 0 0 40px -10px rgba(52, 211, 153, 0.2); }
+}

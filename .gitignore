@@ -1,0 +1,101 @@
+# =============================================
+# CompanyIQ — Root .gitignore
+# =============================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env.local
+
+# Environment files (keep .env.example, ignore actual .env)
+companyiq/backend/.env
+
+# Python testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+*.coveragerc
+nosetests.xml
+coverage.xml
+*.cover
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Node.js / Frontend
+companyiq/frontend/node_modules/
+companyiq/frontend/dist/
+companyiq/frontend/.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# ChromaDB / Vector store data
+companyiq/backend/chroma_db/
+
+# Uploads (user-uploaded files)
+companyiq/uploads/
+companyiq/backend/uploads/
+
+# Docker
+*.log
+
+# Build artifacts
+*.pyc
+*.pyo
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Test databases
+*test*.db
+
+# Secrets / Keys
+*.pem
+*.key
+*.p12
