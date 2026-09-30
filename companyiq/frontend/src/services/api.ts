@@ -94,6 +94,27 @@ export const notificationsApi = {
 // ── Evaluation ─────────────────────────────────────────
 export const evaluationApi = {
   get: () => api.get('/evaluation').then(r => r.data),
+  run: () => api.post('/evaluation/run').then(r => r.data),
+}
+
+// ── Research Sources & Documents ───────────────────────
+export const documentsApi = {
+  list: (companyId?: string) =>
+    api.get('/documents', { params: companyId ? { company_id: companyId } : {} }).then(r => r.data),
+  upload: (companyId: string, file: File, sourceType: string = 'annual_report', title?: string) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('company_id', companyId)
+    formData.append('source_type', sourceType)
+    if (title) formData.append('title', title)
+    return api.post('/documents/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).then(r => r.data)
+  },
+  ingestText: (data: { company_id: string; title: string; text: string; source_type?: string }) =>
+    api.post('/documents/text', data).then(r => r.data),
+  getChunks: (docId: string) => api.get(`/documents/${docId}/chunks`).then(r => r.data),
+  delete: (docId: string) => api.delete(`/documents/${docId}`).then(r => r.data),
 }
 
 // ── Dashboard ──────────────────────────────────────────

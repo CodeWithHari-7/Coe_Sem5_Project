@@ -16,6 +16,7 @@ interface Section {
   status: 'AI_GENERATED' | 'HUMAN_MODIFIED' | 'HUMAN_APPROVED'
   priority: string
   confidence?: number
+  evidence?: any[]
   human_note?: string
   order: number
 }
@@ -64,6 +65,11 @@ function SectionCard({ section, onUpdate, onApprove, onReject }: {
           </button>
           <h3 className="text-sm font-semibold text-slate-200">{section.title}</h3>
           <span className={sc.color + ' badge'}><sc.icon className="w-3 h-3" />{sc.label}</span>
+          {section.confidence && (
+            <span className="px-2 py-0.5 rounded-full bg-slate-800 text-cyan-300 border border-slate-700 font-mono text-[10px]">
+              {(section.confidence * 100).toFixed(0)}% Conf
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-1.5">
           {!editing && section.status === 'AI_GENERATED' && (
@@ -118,6 +124,28 @@ function SectionCard({ section, onUpdate, onApprove, onReject }: {
               {section.human_note && (
                 <div className="mt-3 p-2.5 rounded-lg bg-teal-950/20 border border-teal-800/20 text-xs text-teal-300">
                   <span className="font-semibold">Note:</span> {section.human_note}
+                </div>
+              )}
+              {section.evidence && section.evidence.length > 0 && (
+                <div className="mt-4 pt-3 border-t border-slate-800/40 space-y-2">
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    Section Provenance Citations ({section.evidence.length})
+                  </p>
+                  <div className="space-y-1.5">
+                    {section.evidence.map((ev: any, idx: number) => (
+                      <div key={idx} className="p-2.5 rounded-lg bg-slate-800/40 border border-slate-700/50 text-xs text-slate-300 flex items-start gap-2">
+                        {ev.chunk_id && (
+                          <span className="px-1.5 py-0.5 rounded bg-amber-950/70 text-amber-300 font-mono text-[10px] border border-amber-800/50 flex-shrink-0">
+                            Chunk #{ev.chunk_id}
+                          </span>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <span className="font-semibold text-slate-200 block truncate">{ev.document_name || ev.title}</span>
+                          <p className="text-slate-400 font-mono text-[11px] mt-0.5 line-clamp-2">"{ev.snippet}"</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </>

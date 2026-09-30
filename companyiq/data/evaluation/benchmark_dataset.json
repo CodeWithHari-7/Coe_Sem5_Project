@@ -1,0 +1,259 @@
+{
+  "benchmark_metadata": {
+    "version": "2.0.0",
+    "name": "CompanyIQ Enterprise Recommendation & Account Planning Benchmark",
+    "description": "Ground truth evaluation dataset comparing Rule-Based Baseline vs. AI+RAG multi-factor recommendation pipeline across 12 diverse enterprise scenarios including happy paths and edge cases.",
+    "evaluation_metrics": [
+      "precision",
+      "recall",
+      "f1_score",
+      "acceptance_rate",
+      "avg_response_time_ms",
+      "evidence_coverage",
+      "false_positive_rate",
+      "false_negative_rate",
+      "failure_rate",
+      "user_satisfaction"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "sc_01",
+      "company_name": "Tata Motors",
+      "industry": "Automotive / Electric Vehicles",
+      "input_query": "Research Tata Motors and identify high-value EV opportunities and battery strategies",
+      "ground_truth_opportunities": [
+        "Battery Predictive Analytics & Cell Health Platform",
+        "Commercial Fleet EV Routing & Charging Optimization",
+        "Connected Vehicle Telemetry Monetization Marketplace"
+      ],
+      "distractor_opportunities": [
+        "Oil Refinery Pipeline Automation",
+        "Commercial Real Estate Brokerage"
+      ],
+      "baseline_matches": [
+        "Fleet Management",
+        "Predictive Maintenance",
+        "Supply Chain Analytics"
+      ],
+      "requires_rag": true,
+      "expected_evidence_chunks": 3
+    },
+    {
+      "id": "sc_02",
+      "company_name": "Infosys",
+      "industry": "Information Technology / Enterprise AI",
+      "input_query": "Identify enterprise opportunities for Infosys in Generative AI and cloud modernization",
+      "ground_truth_opportunities": [
+        "Automated RAG & Knowledge Agent Accelerator",
+        "Legacy Mainframe Modernization Accelerator",
+        "AI Governance & Provenance Validation Suite"
+      ],
+      "distractor_opportunities": [
+        "Residential Solar Panel Installation",
+        "Retail Grocery Delivery Service"
+      ],
+      "baseline_matches": [
+        "Customer Success Analytics",
+        "Product Usage Intelligence",
+        "Churn Prediction"
+      ],
+      "requires_rag": true,
+      "expected_evidence_chunks": 3
+    },
+    {
+      "id": "sc_03",
+      "company_name": "Apollo Hospitals",
+      "industry": "Healthcare / Hospital Networks",
+      "input_query": "Research Apollo Hospitals for clinical decision support and telemedicine analytics",
+      "ground_truth_opportunities": [
+        "Clinical Decision Support & Diagnostics Intelligence",
+        "Telemedicine Patient Triaging Platform",
+        "Hospital Bed Capacity & Resource Forecasting"
+      ],
+      "distractor_opportunities": [
+        "Heavy Machinery Leasing",
+        "Aviation Fuel Hedging"
+      ],
+      "baseline_matches": [
+        "Patient Analytics",
+        "Claims Processing",
+        "Clinical Decision Support"
+      ],
+      "requires_rag": true,
+      "expected_evidence_chunks": 2
+    },
+    {
+      "id": "sc_04",
+      "company_name": "HDFC Bank",
+      "industry": "Banking & Financial Services",
+      "input_query": "Identify high-priority digital opportunities for HDFC Bank fraud detection and risk underwriting",
+      "ground_truth_opportunities": [
+        "Real-Time Transaction Fraud Detection Engine",
+        "Automated SME Credit Underwriting Platform",
+        "AI Regulatory Compliance & AML Intelligence"
+      ],
+      "distractor_opportunities": [
+        "Automotive Spare Parts Manufacturing",
+        "Cryptocurrency Casino Software"
+      ],
+      "baseline_matches": [
+        "Fraud Detection",
+        "Customer Analytics",
+        "Risk Management"
+      ],
+      "requires_rag": true,
+      "expected_evidence_chunks": 3
+    },
+    {
+      "id": "sc_05",
+      "company_name": "Reliance Retail",
+      "industry": "Retail & E-Commerce",
+      "input_query": "Analyze Reliance Retail omnichannel expansion and supply chain inventory management",
+      "ground_truth_opportunities": [
+        "Omnichannel Demand Forecasting & Replenishment",
+        "Store Shelf Space & Planogram Computer Vision",
+        "Hyperlocal Delivery Route Orchestration"
+      ],
+      "distractor_opportunities": [
+        "Deep Sea Mineral Exploration",
+        "Satellite Propulsion Systems"
+      ],
+      "baseline_matches": [
+        "Demand Forecasting",
+        "Customer Segmentation",
+        "Inventory Optimization"
+      ],
+      "requires_rag": true,
+      "expected_evidence_chunks": 2
+    },
+    {
+      "id": "sc_06",
+      "company_name": "Delhivery",
+      "industry": "Logistics & Supply Chain",
+      "input_query": "Evaluate Delhivery express logistics and sortation automation opportunities",
+      "ground_truth_opportunities": [
+        "Automated Hub Sortation & Dynamic Routing",
+        "Last-Mile First-Attempt Delivery Optimization",
+        "Cross-Dock Freight Capacity Utilization"
+      ],
+      "distractor_opportunities": [
+        "Fast Food Franchise Consulting",
+        "Gaming Hardware Peripherals"
+      ],
+      "baseline_matches": [
+        "Route Optimization",
+        "Fleet Tracking",
+        "Warehouse Automation"
+      ],
+      "requires_rag": true,
+      "expected_evidence_chunks": 2
+    },
+    {
+      "id": "sc_07",
+      "company_name": "Razorpay",
+      "industry": "FinTech / SaaS",
+      "input_query": "Explore payment intelligence and merchant churn mitigation for Razorpay",
+      "ground_truth_opportunities": [
+        "Merchant Payment Churn Prediction & Retention",
+        "Cross-Border FX Optimization Gateway",
+        "Payroll & Working Capital Credit Scoring"
+      ],
+      "distractor_opportunities": [
+        "Automobile Engine Remanufacturing",
+        "Textile Weaving Automation"
+      ],
+      "baseline_matches": [
+        "Customer Success Analytics",
+        "Product Usage Intelligence",
+        "Churn Prediction"
+      ],
+      "requires_rag": true,
+      "expected_evidence_chunks": 2
+    },
+    {
+      "id": "sc_08",
+      "company_name": "Adani Green Energy",
+      "industry": "Renewable Energy & Utilities",
+      "input_query": "Analyze Adani Green solar park predictive maintenance and grid transmission balancing",
+      "ground_truth_opportunities": [
+        "Solar Inverter Predictive Maintenance",
+        "Grid Energy Yield Forecasting & Dispatch",
+        "Substation IoT Thermal Anomaly Detection"
+      ],
+      "distractor_opportunities": [
+        "Fast Fashion Garment Manufacturing",
+        "Cinema Box Office Ticketing"
+      ],
+      "baseline_matches": [
+        "Grid Analytics",
+        "Predictive Maintenance",
+        "Energy Optimization"
+      ],
+      "requires_rag": true,
+      "expected_evidence_chunks": 2
+    },
+    {
+      "id": "sc_09_edge_sparse",
+      "company_name": "Stealth AI BioTech X",
+      "industry": "Unknown / Unclassified",
+      "input_query": "Research Stealth AI BioTech X and propose enterprise deal strategy",
+      "ground_truth_opportunities": [
+        "Document Ingestion & Discovery — Stealth AI BioTech X"
+      ],
+      "distractor_opportunities": [
+        "Pre-Built Multi-Million Dollar Pharma License"
+      ],
+      "baseline_matches": [],
+      "requires_rag": false,
+      "expected_edge_case": "sparse_profile",
+      "expected_confidence_max": 0.45
+    },
+    {
+      "id": "sc_10_edge_conflict",
+      "company_name": "Tata Motors",
+      "industry": "Automotive / EV",
+      "input_query": "Cut all R&D budget by 60% immediately while doubling R&D headcount and tripling vehicle platforms",
+      "ground_truth_opportunities": [
+        "Battery Predictive Analytics & Cell Health Platform"
+      ],
+      "distractor_opportunities": [],
+      "baseline_matches": [
+        "Fleet Management"
+      ],
+      "requires_rag": true,
+      "expected_edge_case": "conflicting_preferences",
+      "expected_conflict_flag": true
+    },
+    {
+      "id": "sc_11_edge_unavailable",
+      "company_name": "Ola Electric",
+      "industry": "Electric Vehicles",
+      "input_query": "Propose diesel combustion engine supply chain options for Ola Electric scooters",
+      "ground_truth_opportunities": [],
+      "distractor_opportunities": [
+        "V8 Diesel Turbo Engine Supply"
+      ],
+      "baseline_matches": [
+        "Fleet Management"
+      ],
+      "requires_rag": true,
+      "expected_edge_case": "unavailable_option",
+      "expected_rejection": true
+    },
+    {
+      "id": "sc_12_edge_out_of_domain",
+      "company_name": "None",
+      "industry": "None",
+      "input_query": "What is the weather forecast in Paris tomorrow and can you write a poem about chocolate cake?",
+      "ground_truth_opportunities": [],
+      "distractor_opportunities": [
+        "Paris Weather Optimization Platform"
+      ],
+      "baseline_matches": [],
+      "requires_rag": false,
+      "expected_edge_case": "out_of_domain",
+      "expected_unsupported_intent": true
+    }
+  ]
+}

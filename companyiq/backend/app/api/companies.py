@@ -160,13 +160,71 @@ def get_company_updates(
 
 
 def _seed_demo_companies(db: Session) -> None:
-    """Seed demo companies on startup."""
+    """Seed demo companies and foundational RAG documents on startup."""
     for demo in DEMO_COMPANIES:
         existing = db.query(Company).filter(Company.name == demo["name"]).first()
         if not existing:
             c = Company(id=str(uuid.uuid4()), **demo)
             db.add(c)
     db.commit()
+
+    # Seed initial RAG documents if none exist
+    doc_count = db.query(Document).count()
+    if doc_count == 0:
+        tata = db.query(Company).filter(Company.name == "Tata Motors").first()
+        infy = db.query(Company).filter(Company.name == "Infosys").first()
+        admin_user = db.query(User).first()
+        uid = admin_user.id if admin_user else "system"
+
+        from app.services.document_service import get_document_service
+        doc_service = get_document_service()
+
+        if tata:
+            tata_text = (
+                "Tata Motors Electric Vehicle Strategy & Battery Technology Review (FY2024-25):\n\n"
+                "Tata Motors has secured undisputed leadership in the Indian passenger EV market, capturing over 70% market share "
+                "through the high adoption of Nexon EV, Tiago EV, and Punch EV. The company's strategic roadmap mandates deploying "
+                "10 distinct all-electric nameplates by 2026.\n\n"
+                "Key strategic priorities highlighted in corporate disclosures include:\n"
+                "1. Domestic Battery Cell Manufacturing: Mitigating raw material import vulnerability via domestic cell joint ventures.\n"
+                "2. Battery Predictive Analytics & Health Diagnostics: Managing battery warranty liabilities as EV fleets age. "
+                "Early cell-level predictive analytics and remaining useful life (RUL) estimation can reduce warranty claims by 18-25%.\n"
+                "3. Commercial Fleet Charging Orchestration: Deploying smart charging infrastructure with public transit agencies to maximize fleet uptime.\n"
+                "4. Connected Fleet Telemetry Monetization: Over 500,000 active vehicles on Tata Fleet Edge generating real-time operational data."
+            )
+            try:
+                doc_service.ingest_raw_text(
+                    db=db,
+                    text=tata_text,
+                    title="Tata Motors EV Strategic Review 2024-25",
+                    company_id=tata.id,
+                    user_id=uid,
+                    source_type="annual_report",
+                )
+            except Exception as e:
+                logger.warning("seed_tata_doc_failed", error=str(e))
+
+        if infy:
+            infy_text = (
+                "Infosys Enterprise Generative AI & Cloud Modernization Report (2024):\n\n"
+                "Infosys is accelerating client adoption of Generative AI through the Infosys Topaz suite, built on enterprise-grade "
+                "foundation models and secure data perimeters. Cloud services through Infosys Cobalt continue to drive over 40% of total revenue.\n\n"
+                "Key strategic initiatives include:\n"
+                "1. Generative AI Co-Development: Establishing enterprise RAG accelerators for BFSI, telecom, and healthcare clients.\n"
+                "2. Automated Code Migration: Legacy mainframe modernization and automated COBOL-to-Java translation accelerators.\n"
+                "3. AI Governance & Hallucination Mitigation: Providing explainable AI evaluation frameworks with traceable source citations."
+            )
+            try:
+                doc_service.ingest_raw_text(
+                    db=db,
+                    text=infy_text,
+                    title="Infosys Enterprise AI & Cloud Report 2024",
+                    company_id=infy.id,
+                    user_id=uid,
+                    source_type="annual_report",
+                )
+            except Exception as e:
+                logger.warning("seed_infy_doc_failed", error=str(e))
 
 
 def _audit(db: Session, user_id: str, action: AuditAction, resource_type: str, resource_id: str):

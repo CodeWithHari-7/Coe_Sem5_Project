@@ -114,6 +114,8 @@ class EvidenceItem(BaseModel):
     title: str
     url: Optional[str] = None
     document_id: Optional[str] = None
+    document_name: Optional[str] = None
+    chunk_id: Optional[str] = None
     snippet: str
     relevance_score: float = Field(ge=0.0, le=1.0)
     publication_date: Optional[str] = None
@@ -408,6 +410,48 @@ class NotificationOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# ──────────────────────────────────────────────
+# Document Ingestion Schemas
+# ──────────────────────────────────────────────
+
+class DocumentOut(BaseModel):
+    id: str
+    company_id: str
+    filename: str
+    title: Optional[str] = None
+    source_type: str
+    status: str
+    page_count: Optional[int] = None
+    word_count: Optional[int] = None
+    chunks_count: Optional[int] = 0
+    error_message: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class DocumentChunkOut(BaseModel):
+    id: str
+    document_id: str
+    company_id: Optional[str] = None
+    chunk_index: int
+    chunk_text: str
+    token_count: Optional[int] = None
+    vector_id: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class DocumentTextUploadRequest(BaseModel):
+    company_id: str
+    title: str
+    text: str
+    source_type: Optional[str] = "company_website"
 
 
 # ──────────────────────────────────────────────

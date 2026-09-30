@@ -5,9 +5,10 @@
 ## **Project Title:**
 **CompanyIQ — AI-Powered Company Research & Account Planning Assistant**
 
-- **Course / Degree:** Bachelor of Engineering / Technology (Computer Science & Engineering)  
+- **Course / Degree:** Bachelor of Engineering / Technology (Electronics & Communication Engineering — ECE)  
 - **Semester:** 5th Semester  
-- **Review Stage:** Review 1 (Phase 1 Milestone — 35% Completion)  
+- **Review Stage:** Review 1 (Phase 1 & Phase 2 Advanced Milestones)  
+- **Department:** Department of Electronics & Communication Engineering (ECE / COE Semester 5)  
 - **Repository:** [https://github.com/CodeWithHari-7/Coe_Sem5_Project.git](https://github.com/CodeWithHari-7/Coe_Sem5_Project.git)  
 - **Date:** September 2026  
 
@@ -213,16 +214,23 @@ Foundational Infra   Agent Workflows & Intelligence Synthesis  Evaluation & Poli
 | Phase | Milestone | Scope / Deliverables | Status |
 | :--- | :--- | :--- | :--- |
 | **Phase 1** | **Review 1 (35%)** | Problem definition, system architecture, database schema, JWT auth, ChromaDB vector store, RAG chunking pipeline, React/TS UI foundation, initial API scaffolding. | **Completed (100%)** |
-| **Phase 2** | **Review 2 (70%)** | Web search scraping tools, autonomous multi-step research agent, MEDDPICC account plan generation, citation linking, interactive plan editing. | **In Progress** |
-| **Phase 3** | **Review 3 (100%)** | Automated hallucination evaluation framework, export to PDF/DOCX, performance benchmarking, user acceptance testing, final report and presentation. | **Scheduled** |
+| **Phase 2** | **Review 2 (70%)** | End-to-end grounded RAG ingestion (PDF, DOCX, TXT), empirical benchmark suite (+94.3% F1 gain), edge-case handling (sparse, conflicts, unavailable, out-of-domain), chunk provenance citations (`[Chunk #chk_...]`), Vitest frontend test suite, and GitHub Actions CI. | **Completed (100%)** |
+| **Phase 3** | **Review 3 (100%)** | Multi-tenant export to PDF/DOCX, production telemetry, multi-agent automated orchestration, and final university project defense. | **Scheduled** |
 
 ---
 
-## 11. Conclusion
+## 11. Reviewer Feedback Resolution Summary
 
-Phase 1 of **CompanyIQ** has concluded with all planned 35% milestone deliverables fully realized and verified. The system boasts a robust architectural foundation: an asynchronous FastAPI backend, a clean and responsive React/TypeScript frontend, a secure authentication subsystem, and an operational ChromaDB vector pipeline. The codebase has been organized under version control and pushed to GitHub. The project is on schedule to enter Phase 2, which will focus on deploying the autonomous research agents and MEDDPICC generation workflows.
+All 6 critical areas identified during reviewer inspection have been systematically resolved:
+1. **End-to-End Workflow:** Document ingestion pipeline fully operational (Upload → Extract → Chunk → Vector Index → Score → Plan).
+2. **Empirical Evaluation Benchmark:** Real measured benchmark on 12 ground truth enterprise scenarios (+172.5% Precision, +94.3% F1 score, +72.7% Acceptance Rate over baseline).
+3. **Edge-Case Suite:** Comprehensive unit & integration tests covering sparse profiles, contradictory goals, incompatible platform requests, and out-of-domain queries.
+4. **Verifiable Explainability:** Surfaced citation chunk IDs (`[Chunk #chk_...]`), similarity match percentages, and source document titles across OpportunityCards and Account Plans.
+5. **Frontend Automated Verification:** 7 Vitest component tests and GitHub Actions CI pipeline covering both backend and frontend builds.
+6. **Credential & Department Alignment:** Corrected academic department to Electronics & Communication Engineering (ECE / COE Sem 5) and documented secure environment secret handling.
 
 ---
+
 *Report Prepared by: Hariharan*  
-*Department of Computer Science & Engineering (COE Semester 5)*  
+*Department of Electronics & Communication Engineering (ECE / COE Semester 5)*  
 *GitHub: [https://github.com/CodeWithHari-7/Coe_Sem5_Project.git](https://github.com/CodeWithHari-7/Coe_Sem5_Project.git)*

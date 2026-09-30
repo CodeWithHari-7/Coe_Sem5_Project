@@ -57,12 +57,15 @@ class LLMProvider(ABC):
 class OpenAIProvider(LLMProvider):
     def __init__(self):
         import openai
-        self.client = openai.OpenAI(api_key=settings.llm_api_key)
+        self.client = openai.OpenAI(api_key=settings.llm_api_key, timeout=8.0, max_retries=1)
         self.model = settings.model_name
         self.embedding_model = settings.embedding_model
         self._demo_fallback = DemoProvider()
+        self._quota_exhausted = False
 
     def complete(self, messages, temperature=0.2, max_tokens=4096, response_format=None):
+        if self._quota_exhausted:
+            return self._demo_fallback.complete(messages, temperature, max_tokens, response_format)
         start = time.time()
         kwargs = dict(model=self.model, messages=messages, temperature=temperature, max_tokens=max_tokens)
         if response_format == "json_object":
@@ -73,17 +76,29 @@ class OpenAIProvider(LLMProvider):
             logger.info("llm_call", model=self.model, latency_ms=round(latency, 1), tokens=resp.usage.total_tokens)
             return resp.choices[0].message.content
         except Exception as e:
-            logger.warning("openai_complete_failed_falling_back_to_demo", error=str(e))
+            err_str = str(e)
+            if "insufficient_quota" in err_str or "credit_balance_exhausted" in err_str or "RateLimitError" in type(e).__name__:
+                self._quota_exhausted = True
+                logger.warning("openai_quota_exhausted_enabling_fast_fallback", error=err_str[:120])
+            else:
+                logger.warning("openai_complete_failed_falling_back_to_demo", error=err_str[:120])
             return self._demo_fallback.complete(messages, temperature, max_tokens, response_format)
 
     def embed(self, texts: List[str]) -> List[List[float]]:
         if not texts:
             return []
+        if self._quota_exhausted:
+            return self._demo_fallback.embed(texts)
         try:
             resp = self.client.embeddings.create(model=self.embedding_model, input=texts)
             return [item.embedding for item in resp.data]
         except Exception as e:
-            logger.warning("openai_embed_failed_falling_back_to_demo", error=str(e))
+            err_str = str(e)
+            if "insufficient_quota" in err_str or "credit_balance_exhausted" in err_str or "RateLimitError" in type(e).__name__:
+                self._quota_exhausted = True
+                logger.warning("openai_quota_exhausted_enabling_fast_fallback", error=err_str[:120])
+            else:
+                logger.warning("openai_embed_failed_falling_back_to_demo", error=err_str[:120])
             return self._demo_fallback.embed(texts)
 
 

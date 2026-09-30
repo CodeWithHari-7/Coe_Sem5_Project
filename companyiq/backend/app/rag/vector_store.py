@@ -68,19 +68,26 @@ class ChromaVectorStore(VectorStore):
 
     def search(self, query_embedding: List[float], top_k: int = 10, filter_metadata: Optional[Dict] = None) -> List[SearchResult]:
         try:
-            kwargs: Dict[str, Any] = {"query_embeddings": [query_embedding], "n_results": min(top_k, max(1, self.collection.count()))}
+            total_count = self.collection.count()
+            if total_count == 0:
+                return []
+            kwargs: Dict[str, Any] = {"query_embeddings": [query_embedding], "n_results": min(top_k, total_count)}
             if filter_metadata:
-                where = {k: {"$eq": str(v)} for k, v in filter_metadata.items() if v}
-                if where:
-                    kwargs["where"] = where
+                clean_filters = {k: str(v) for k, v in filter_metadata.items() if v}
+                if len(clean_filters) == 1:
+                    k, v = next(iter(clean_filters.items()))
+                    kwargs["where"] = {k: {"$eq": v}}
+                elif len(clean_filters) > 1:
+                    kwargs["where"] = {"$and": [{k: {"$eq": v}} for k, v in clean_filters.items()]}
             results = self.collection.query(**kwargs)
             output = []
-            for i, (doc_id, doc, dist, meta) in enumerate(zip(
-                results["ids"][0], results["documents"][0],
-                results["distances"][0], results["metadatas"][0]
-            )):
-                score = 1.0 - dist  # cosine distance → similarity
-                output.append(SearchResult(id=doc_id, text=doc, score=score, metadata=meta))
+            if results and results.get("ids") and len(results["ids"]) > 0:
+                for doc_id, doc, dist, meta in zip(
+                    results["ids"][0], results["documents"][0],
+                    results["distances"][0], results["metadatas"][0]
+                ):
+                    score = max(0.0, min(1.0, 1.0 - (dist / 2.0) if dist > 1.0 else 1.0 - dist))
+                    output.append(SearchResult(id=doc_id, text=doc, score=round(score, 3), metadata=meta or {}))
             return output
         except Exception as e:
             logger.error("chroma_search_failed", error=str(e))

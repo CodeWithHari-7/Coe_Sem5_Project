@@ -8,7 +8,8 @@ import CompaniesPage from './pages/CompaniesPage'
 import AccountPlanPage from './pages/AccountPlanPage'
 import EvaluationPage from './pages/EvaluationPage'
 import NotificationsPage from './pages/NotificationsPage'
-import { OpportunitiesPage, SourcesPage, HistoryPage, SettingsPage } from './pages/StubPages'
+import SourcesPage from './pages/SourcesPage'
+import { OpportunitiesPage, HistoryPage, SettingsPage } from './pages/StubPages'
 
 export default function App() {
   return (

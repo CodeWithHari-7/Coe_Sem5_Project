@@ -1,6 +1,8 @@
 """
 RAG Retriever — hybrid retrieval: semantic + BM25 keyword + metadata filtering.
+Includes verifiable chunk_id and provenance attribution for all retrieved segments.
 """
+import uuid
 from typing import List, Dict, Any, Optional
 from app.rag.vector_store import VectorStore, SearchResult
 from app.agents.llm_provider import LLMProvider
@@ -11,11 +13,28 @@ logger = get_logger("retriever")
 
 
 class RetrievedChunk:
-    def __init__(self, text: str, score: float, metadata: Dict[str, Any], source: str = "semantic"):
+    def __init__(
+        self,
+        text: str,
+        score: float,
+        metadata: Dict[str, Any],
+        source: str = "semantic",
+        chunk_id: Optional[str] = None,
+    ):
         self.text = text
         self.score = score
         self.metadata = metadata
         self.source = source  # "semantic" | "keyword" | "hybrid"
+        self.chunk_id = chunk_id or metadata.get("chunk_id") or str(uuid.uuid4())[:8]
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "chunk_id": self.chunk_id,
+            "text": self.text,
+            "score": round(self.score, 3),
+            "source": self.source,
+            "metadata": self.metadata,
+        }
 
 
 class HybridRetriever:
@@ -34,14 +53,18 @@ class HybridRetriever:
         Hybrid retrieval:
         1. Semantic search via embedding
         2. BM25 keyword search (on stored texts)
-        3. Merge and re-rank
+        3. Merge and re-rank with verifiable chunk IDs
         """
         top_k = top_k or settings.top_k_chunks
 
         # 1. Semantic search
         try:
             query_embedding = self.llm_provider.embed([query])[0]
-            semantic_results = self.vector_store.search(query_embedding, top_k=top_k * 2, filter_metadata=filter_metadata)
+            semantic_results = self.vector_store.search(
+                query_embedding,
+                top_k=top_k * 2,
+                filter_metadata=filter_metadata,
+            )
         except Exception as e:
             logger.error("semantic_retrieval_failed", error=str(e))
             semantic_results = []
@@ -73,7 +96,13 @@ class HybridRetriever:
             scores = bm25.get_scores(query.lower().split())
             ranked = sorted(zip(scores, candidates), key=lambda x: x[0], reverse=True)
             return [
-                RetrievedChunk(text=r.text, score=float(s), metadata=r.metadata, source="keyword")
+                RetrievedChunk(
+                    text=r.text,
+                    score=float(s),
+                    metadata=r.metadata,
+                    source="keyword",
+                    chunk_id=r.id,
+                )
                 for s, r in ranked[:top_k]
             ]
         except Exception as e:
@@ -87,7 +116,7 @@ class HybridRetriever:
         alpha: float = 0.7,
         k: int = 60,
     ) -> List[RetrievedChunk]:
-        """Merge two ranked lists via RRF."""
+        """Merge two ranked lists via RRF, preserving chunk IDs."""
         scores: Dict[str, float] = {}
         texts: Dict[str, str] = {}
         metas: Dict[str, Dict] = {}
@@ -99,13 +128,19 @@ class HybridRetriever:
             metas[key] = r.metadata
 
         for rank, r in enumerate(keyword):
-            key = r.text[:100]  # use text prefix as key for keyword results
+            key = r.chunk_id or r.text[:100]
             scores[key] = scores.get(key, 0) + (1 - alpha) * (1 / (k + rank + 1))
             texts[key] = r.text
             metas[key] = r.metadata
 
         merged = sorted(scores.items(), key=lambda x: x[1], reverse=True)
         return [
-            RetrievedChunk(text=texts[k], score=s, metadata=metas[k], source="hybrid")
-            for k, s in merged
+            RetrievedChunk(
+                text=texts[key],
+                score=score,
+                metadata=metas[key],
+                source="hybrid",
+                chunk_id=key,
+            )
+            for key, score in merged
         ]

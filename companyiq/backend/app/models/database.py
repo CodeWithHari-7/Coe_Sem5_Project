@@ -44,12 +44,18 @@ class SourceType(str, enum.Enum):
     txt = "txt"
     knowledge_base = "knowledge_base"
     manual = "manual"
+    annual_report = "annual_report"
+    sec_filing = "sec_filing"
+    press_release = "press_release"
+    whitepaper = "whitepaper"
+    manual_upload = "manual_upload"
 
 
 class DocumentStatus(str, enum.Enum):
     pending = "pending"
     processing = "processing"
     ready = "ready"
+    indexed = "ready"
     failed = "failed"
 
 

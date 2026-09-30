@@ -86,13 +86,22 @@ def chat(
         company = db.query(Company).filter(
             Company.name.ilike(f"%{company_name}%")
         ).first()
-        company_id = company.id if company else None
+        if company:
+            company_id = company.id
+            company_name = company.name
+        else:
+            company_id = None
 
         result = agent.research_company(
             company_name=company_name,
             focus_area=intent_data.get("focus"),
             session_id=conversation_id,
+            company_id=company_id,
         )
+        if company and result.get("success"):
+            company.intelligence = result
+            db.flush()
+
         structured_data = result
         content = _format_research_response(result, intent)
         retrieval_count = result.get("sources_count", 0)

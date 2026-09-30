@@ -33,7 +33,18 @@ def create_plan(
     if not company:
         raise HTTPException(404, "Company not found")
 
-    research_data = company.intelligence or {"data_label": "DEMO_DATA"}
+    research_data = company.intelligence
+    if not research_data or not research_data.get("opportunities"):
+        from app.agents.research_agent import ResearchAgent
+        agent = ResearchAgent()
+        research_data = agent.research_company(
+            company_name=company.name,
+            focus_area=data.focus,
+            company_id=company.id,
+        )
+        company.intelligence = research_data
+        db.flush()
+
     plan = generate_account_plan(
         db=db,
         company_id=data.company_id,
@@ -153,8 +164,19 @@ def get_evaluation(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """Retrieve verified evaluation metrics comparing Baseline vs. AI+RAG."""
     evaluator = Evaluator()
-    return evaluator.get_demo_evaluation()
+    return evaluator.get_evaluation(db=db)
+
+
+@eval_router.post("/run")
+def run_evaluation(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Trigger live execution of benchmark suite and return fresh metrics."""
+    evaluator = Evaluator()
+    return evaluator.run_benchmark(db=db)
 
 
 # ─── Dashboard Stats ────────────────────────────────────

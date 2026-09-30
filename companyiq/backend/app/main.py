@@ -14,6 +14,7 @@ from app.utils.logger import configure_logging, get_logger, set_request_context
 from app.api.auth import router as auth_router
 from app.api.companies import router as companies_router, _seed_demo_companies
 from app.api.research import router as research_router
+from app.api.documents import router as documents_router
 from app.api.plans import plans_router, feedback_router, notif_router, eval_router, dashboard_router
 from app.services.auth_service import create_demo_users
 import uuid
@@ -101,6 +102,7 @@ async def general_error_handler(request: Request, exc: Exception):
 app.include_router(auth_router, prefix="/api")
 app.include_router(companies_router, prefix="/api")
 app.include_router(research_router, prefix="/api")
+app.include_router(documents_router, prefix="/api")
 app.include_router(plans_router, prefix="/api")
 app.include_router(feedback_router, prefix="/api")
 app.include_router(notif_router, prefix="/api")

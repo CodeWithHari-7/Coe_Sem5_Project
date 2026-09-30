@@ -16,6 +16,8 @@ interface ScoreBreakdown {
 }
 
 interface Evidence {
+  chunk_id?: string
+  document_name?: string
   source_type: string
   title: string
   snippet: string
@@ -139,7 +141,9 @@ function OpportunityCard({ opp }: { opp: Opp }) {
           {/* Evidence */}
           {opp.evidence?.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Evidence ({opp.evidence.length})</p>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                Ground Truth Evidence ({opp.evidence.length})
+              </p>
               <div className="space-y-2">
                 {opp.evidence.map((ev, i) => (
                   <div key={i} className="evidence-item">
@@ -147,12 +151,21 @@ function OpportunityCard({ opp }: { opp: Opp }) {
                       {i + 1}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-slate-300 truncate">{ev.title}</p>
-                      <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">{ev.snippet}</p>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-xs font-semibold text-slate-200 truncate">{ev.document_name || ev.title}</p>
+                        {ev.chunk_id && (
+                          <span className="px-1.5 py-0.5 rounded bg-amber-950/70 text-amber-300 font-mono text-[10px] border border-amber-800/50">
+                            Chunk #{ev.chunk_id}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-400 mt-1 font-mono bg-slate-900/80 p-2 rounded border border-slate-800 line-clamp-3">
+                        "{ev.snippet}"
+                      </p>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs text-slate-600 capitalize">{ev.source_type}</span>
+                        <span className="text-xs text-slate-500 capitalize">{ev.source_type?.replace('_', ' ')}</span>
                         {ev.relevance_score > 0 && (
-                          <span className="text-xs text-brand-500">{(ev.relevance_score * 100).toFixed(0)}% relevant</span>
+                          <span className="text-xs text-emerald-400 font-medium">{(ev.relevance_score * 100).toFixed(0)}% semantic match</span>
                         )}
                       </div>
                     </div>

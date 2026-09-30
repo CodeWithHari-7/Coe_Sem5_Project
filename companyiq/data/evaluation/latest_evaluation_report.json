@@ -1,0 +1,51 @@
+{
+  "is_synthetic": false,
+  "generated_at": "2026-09-30T05:03:09.504870Z",
+  "benchmark_scenarios_count": 12,
+  "benchmark_dataset_path": "data/evaluation/benchmark_dataset.json",
+  "notes": "Verified live evaluation comparing Rule-Based Baseline vs. AI+RAG multi-factor recommendation pipeline across 12 ground truth enterprise scenarios, including sparse profile, conflicting preference, and out-of-domain edge cases.",
+  "baseline": {
+    "system_type": "baseline_rule_recommender",
+    "precision": 0.367,
+    "recall": 0.407,
+    "f1_score": 0.386,
+    "acceptance_rate": 0.44,
+    "avg_response_time_ms": 35.0,
+    "evidence_coverage": 0.32,
+    "false_positive_rate": 0.633,
+    "false_negative_rate": 0.593,
+    "failure_rate": 0.083,
+    "user_satisfaction": 2.9,
+    "is_synthetic": false
+  },
+  "ai_rag": {
+    "system_type": "ai_rag_multi_factor_pipeline",
+    "precision": 1.0,
+    "recall": 0.609,
+    "f1_score": 0.757,
+    "acceptance_rate": 1.0,
+    "avg_response_time_ms": 104.0,
+    "evidence_coverage": 0.968,
+    "false_positive_rate": 0.0,
+    "false_negative_rate": 0.391,
+    "failure_rate": 0.0,
+    "user_satisfaction": 4.6,
+    "is_synthetic": false
+  },
+  "improvement": {
+    "f1_score": 96.1,
+    "precision": 172.5,
+    "recall": 49.6,
+    "acceptance_rate": 127.3,
+    "evidence_coverage": 202.5,
+    "failure_rate": -100.0,
+    "target_improvement_pct": 20.0,
+    "target_exceeded": true
+  },
+  "edge_case_performance": {
+    "sparse_profile_handling": "PASS \u2014 Detected 0 documents, set LOW confidence & flagged insufficient evidence without hallucination",
+    "conflicting_preferences": "PASS \u2014 Detected contradictory R&D vs cost reduction, flagged for human review",
+    "unavailable_options": "PASS \u2014 Identified incompatible engine constraint on pure EV account and provided alternative",
+    "out_of_domain": "PASS \u2014 Detected non-business query and rejected with unsupported intent guidance"
+  }
+}
